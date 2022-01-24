@@ -1,0 +1,1304 @@
+% povetron.tex
+% Povetron magazine typesetting macros
+% Miroslav Broz (miroslav.broz@email.cz), May 12th 2004
+
+%\batchmode
+
+%% config (config.tex should be loaded before!)
+
+%% input
+
+\ifx\pdfoutput\undefined
+  \input epsf
+\else
+  \newdimen\epsfxsize
+  \newdimen\epsfysize
+\fi
+
+\newread\softread
+\def\softinput#1{
+  \openin\softread #1
+  \ifeof\softread
+  \else\closein\softread \input #1\fi
+}
+
+%% mathops
+
+% desetinna carka je ord
+%\mathcode`\,="013B
+
+\def\d{{\rm d}}
+\def\i{{\rm i}}
+\def\e{\mathop{\rm e}\nolimits}
+\def\tg{\mathop{\rm tg}\nolimits}
+\def\cotg{\mathop{\rm cotg}\nolimits}
+\def\arctg{\mathop{\rm arctg}\nolimits}
+\def\promile{{\rm\char141}}
+\let\oldvec=\vec
+\def\vec#1{{\fam\vefam\tenve #1}}
+\def\sks{\!\cdot\!}
+\def\sgn{\mathop{\rm sgn}\nolimits}
+\def\hbx#1{{\hbox to 0pt{\hss\smallfonts\smallstrut #1\hss}}}
+\def\skrt#1{\setbox0=\hbox{$\displaystyle{#1}$}\vbox{\ialign{##\crcr\noalign{\hrule\vskip-\ht0\vskip1.5pt}\box0\crcr}}}
+\def\skrtb#1{\setbox0=\hbox{$\displaystyle{#1}$}\vbox{\ialign{##\crcr\noalign{\hrule\vskip-\ht0\vskip2.5pt}\box0\crcr}}}
+\def\pd{\partial}
+
+\def\frac#1#2{{#1\over #2}}
+\def\frc#1#2{%
+  \mathchoice{%
+    {\textstyle\mathstrut#1\over\textstyle\mathstrut#2}}%
+    {{\textstyle\mathstrut#1\over\textstyle\mathstrut#2}}%
+    {{\scriptstyle\mathstrut#1\over\scriptstyle\mathstrut#2}}%
+    {{\mathstrut#1\over\mathstrut#2}%
+  }%
+}
+
+\catcode`\@=11
+
+\def\m@th{\mathsurround=0pt }
+\newbox\rootbox
+\def\root#1\of{\setbox\rootbox=
+\hbox{$\m@th\scriptscriptstyle{#1}$}
+\mathpalette\r@@t}
+\def\r@@t#1#2{\setbox0=\hbox{$\m@th#1\sqrt{#2}$}
+\dimen0=\ht0 \advance\dimen0 by-\dp0
+\mkern5mu \raise.6\dimen0\copy\rootbox \mkern-10mu \box0 }
+
+%\catcode`\@=12
+
+%% other macros
+
+\def\put#1#2#3{\raise#2\rlap{\kern#1 #3}\ignorespaces}
+\def\,{\ifmmode\mskip\thinmuskip\else\leavevmode\thinspace\fi}
+
+%% page mirror
+
+\hsize=126.5mm
+\vsize=185.6mm
+\hoffset-1in
+\newdimen\margin
+\margin=1.7cm		% this is centered on A5 paper
+\voffset=0cm
+\ifx\pdfoutput\undefined
+  \ifnum\cropmarks=1
+    \margin=4.565cm	% and this is centered on A4!
+    \voffset=4cm
+  \fi
+\else
+  \cropmarks=0		% switch OFF cropmarks in pdftex...
+\fi
+
+\advance\hoffset by\margin	% both margins are the same on A5 paper
+
+\parindent=\baselineskip	% na 1 ctvercik
+
+\clubpenalty=10000
+\widowpenalty=10000
+
+\ifx\pdfoutput\undefined
+\else
+  \pdfimageresolution=300
+  \pdfpagewidth=6.30in
+  \pdfpageheight=9.25in
+\fi
+
+%% hyphenations
+
+%\language=\czech
+\chyph
+
+\def\={\discretionary{-}{-}{-}}
+
+%% allow hyphenation of (too long) URLs
+
+\def\hyphenall{%
+  \lccode`.=`;%
+  \lccode`/=`;%
+  \lccode`:=`;%
+  \lccode`0=`;%
+  \lccode`1=`;%
+  \lccode`2=`;%
+  \lccode`3=`;%
+  \lccode`4=`;%
+  \lccode`5=`;%
+  \lccode`6=`;%
+  \lccode`7=`;%
+  \lccode`8=`;%
+  \lccode`9=`;%
+  \lccode`~=`;%
+  \lccode`\_=`;%
+  \lccode`\-=`;%
+  \lccode`\#=`;%
+  \lccode`\==`;%
+  \lccode`\&=`;%
+  \lccode`\%=`;%
+  \lccode`\?=`;%
+  \lccode`+=`;%
+}
+
+%% fonts definitions
+
+\font\titlefnt=ptmr8z at 62pt
+\font\titlespecfnt=ptmr8z at 48pt
+\font\subtitlefnt=csbx12 at 13.5pt
+\font\specialfnt=csr12 at 36pt
+\font\bigfnt=csr12 at 28pt
+\font\articlefnt=csbx12
+\font\paragraphfnt=csbx10
+\font\sectionfnt=csbx10
+\font\noticefnt=csr9
+\font\noticeitfnt=csti9
+\font\smallfnt=csr8
+\font\scfnt=cscsc10
+\font\smallitfnt=csti8
+\font\smallttfnt=cstt8
+\font\smallbffnt=csbx8
+\font\smallscfnt=cscsc10 at 8pt	% cscsc8 is not Type1
+\font\sixttfnt=cstt8 at 7pt
+
+% azbuka
+\input cyracc.def
+\font\tencyr=wncyr10
+\font\eightcyr=wncyr8
+\def\cyr{\tencyr\cyracc}
+% {\cyr a b v g d e \"e zh z i {\u i} k l m n o p r s t u f kh c ch sh shch {\cprime} y {\cdprime} \ `e yu ya}
+
+\font\rmlg=csr8 \font\rms=csr6 \font\rmss=csr5
+\font\mthlg=cmmi8 \font\mths=cmmi6 \font\mthss=cmmi5
+\font\symlg=cmsy8 \font\syms=cmsy6 \font\symss=cmsy5
+
+\font\eightti=csti8
+\font\sixti=csti8 at 6pt
+\font\ninebf=csbx9
+\scriptfont\itfam=\eightti
+
+\font\tensf=csss10
+\font\eightsf=csss8
+\font\sixsf=csss8 at 6pt
+\newfam\sffam
+\def\sf{\fam\sffam\tensf}
+\textfont\sffam=\tensf \scriptfont\sffam=\eightsf \scriptscriptfont\sffam=\sixsf
+
+% extra fonts could be eventually switched-off
+\def\fontdir{fonts/}
+\newfam\vefam
+
+\ifnum\extrafonts=1
+  \message{extrafonts=\the\extrafonts}
+
+% URW grotesk for vectors
+  \font\tenve   = \fontdir ugrot at 10pt
+  \font\eightve = \fontdir ugrot at 8pt
+  \font\sixve   = \fontdir ugrot at 6pt
+  \font\fiveve  = \fontdir ugrot at 5pt
+  \textfont\vefam=\tenve \scriptfont\vefam=\eightve \scriptscriptfont\vefam=\sixve
+  \textfont\vefam=\tenve \scriptfont\vefam=\eightve \scriptscriptfont\vefam=\sixve
+
+% Euro symbol (by Adobe fonts)
+  \font\eurofnt=\fontdir zpeurs
+
+% Silvio Levy's non-slanted greek letters (namely \mugr)
+  \font\tengr    \fontdir gr10 scaled 1050
+  \font\ninegr   \fontdir gr10 scaled 945
+  \font\eightgr  \fontdir gr10 scaled 840
+  \font\sevengr  \fontdir gr10 scaled 735
+  \font\sixgr    \fontdir gr10 scaled 630
+  \font\fivegr   \fontdir gr10 scaled 525
+  \font\sevengr  \fontdir gr7  scaled 1050
+  \font\sixgr    \fontdir gr7  scaled 945
+  \font\fivegr   \fontdir gr5  scaled 1050
+
+% astronomical symbols
+  \font\astrosymten   = \fontdir astrosym scaled 625
+  \font\astrosymeight = \fontdir astrosym scaled 500
+  \font\astrosymseven = \fontdir astrosym scaled 438
+  \font\astrosymsix   = \fontdir astrosym scaled 375
+  \font\astrosymfive  = \fontdir astrosym scaled 312
+
+  \def\mesic{%
+    {\mathchoice%
+      {\hbox{\kern.02em\lower.1em \hbox{\astrosymten  \char210}}}%
+      {\hbox{\kern.02em\lower.1em \hbox{\astrosymten  \char210}}}%
+      {\hbox{\kern.01em\lower.1em \hbox{\astrosymeight\char210}}}%
+      {\hbox{\kern.00em\lower.09em\hbox{\astrosymsix  \char210}}}%
+    }%
+  }
+
+%  \let\oldpi\pi
+%  \def\pi{{\mathchoice{\hbox{\tengr p}}{\hbox{\tengr p}}{\hbox{\sevengr p}}{\hbox{\fivegr p}}}}
+  \let\mathmu=\mu
+%  \def\mugr{\mathchoice{\hbox{\tengr m}}{\hbox{\tengr m}}{\hbox{\sevengr m}}{\hbox{\fivegr m}}}
+%  \def\mu{\ifmmode\mathmu\else$\mugr$\fi}
+
+\else
+  \font\tenve=csssbx10
+  \font\eightve=csssbx8
+  \font\sixve=csssbx6
+  \font\fiveve=csssbx5
+  \textfont\vefam=\tenve \scriptfont\vefam=\eightve \scriptscriptfont\vefam=\sixve
+  \let\vec=\oldvec
+
+  \let\eurofont=\relax
+
+  \let\tengr=\relax
+  \let\ninegr=\relax
+  \let\eightgr=\relax
+  \let\sevengr=\relax
+  \let\sixgr=\relax
+  \let\fivegr=\relax
+
+  \let\mesic=\relax
+\fi
+
+\font\bf=csb10
+\let\em=\it
+\let\web=\tt
+\let\sc=\scfnt
+\let\obrtab=\bf
+
+% astronomical symbols
+\def\hvezd{\ifmmode *\else $*$\fi}
+\def\slunce{\ifmmode \odot\else $\odot$\fi}
+\def\zeme{\ifmmode \oplus\else $\oplus$\fi}
+
+% small fonts (captions, footnotes, etc.)
+\def\smallfonts{%
+  \textfont0=\rmlg \scriptfont0=\rms \scriptscriptfont1=\rmss%
+  \textfont1=\mthlg \scriptfont1=\mths \scriptscriptfont1=\mthss%
+  \textfont2=\symlg \scriptfont2=\syms \scriptscriptfont2=\symss%
+%
+  \ifnum\extrafonts=1%
+    \textfont\vefam=\eightve \scriptfont\vefam=\sixve \scriptscriptfont\vefam=\fiveve%
+    \def\mugr{\mathchoice{\hbox{\eightgr m}}{\hbox{\eightgr m}}{\hbox{\sixgr m}}{\hbox{\fivegr m}}}%
+    \def\pi{{\mathchoice{\hbox{\eightgr p}}{\hbox{\eightgr p}}{\hbox{\sixgr p}}{\hbox{\fivegr p}}}}%
+  \fi
+%
+  \def\mesic{%
+    {\mathchoice%
+      {\hbox{\kern.02em\lower.1em \hbox{\astrosymeight\char210}}}%
+      {\hbox{\kern.02em\lower.1em \hbox{\astrosymeight\char210}}}%
+      {\hbox{\kern.01em\lower.1em \hbox{\astrosymseven\char210}}}%
+      {\hbox{\kern.00em\lower.09em\hbox{\astrosymsix  \char210}}}%
+    }%
+  }%
+%
+  \def\rm{\fam0\rmlg}%
+  \let\it=\smallitfnt%
+  \let\tt=\smallttfnt%
+  \let\bf=\smallbffnt%
+  \let\sc=\smallscfnt%
+  \let\em=\it%
+  \let\web=\tt%
+  \let\obrtab=\bf%
+  \rm%
+}
+
+\setbox\strutbox=\hbox{\vrule height 9pt depth 3.5pt width 0pt}
+
+\newdimen\smallbaselineskip
+\smallbaselineskip=10pt
+\def\smallstrut{\vrule height 7pt depth 3pt width 0pt}
+
+\let\myphi=\varphi
+\let\myrho=\varrho
+\let\myepsilon=\varepsilon
+
+\def\eur{{\eurofnt E}}
+\def\jmeno#1{{\sc #1}}
+
+%% table of contents with PDF hyperrefs
+
+\catcode`*=11
+\newwrite\toc
+\def\tableofcontents{%
+  \pagenumbers	% this page already numbered
+  \bigskip
+  \noindent\line{{\articlefnt Obsah}\hfil strana}
+  \medskip
+  \softinput{\jobname.toc} 
+  \immediate\openout\toc \jobname.toc
+}
+\def\addcontentline#1#2#3{
+  \write\toc {\string\contentline{\noexpand #1}{\noexpand #2}{#3}}
+}
+
+\newcount\contentlinecnt
+\contentlinecnt=0
+\ifx\pdfoutput\undefined\else
+  \input pdfcolor
+  \ifnum\pdftexversion<14
+    \let\pdfannotlink=\pdfstartlink
+  \fi
+\fi
+
+\newdimen\contentnumwidth
+\contentnumwidth=1em
+
+\def\contentline#1#2#3{
+%  \noindent\hbox to 2em{\hfil #3}\hskip 1em {\bf #1} --- #2\par
+  \noindent \ifx:#2:\else #2:\ \fi {\em%
+  \ifx\pdfoutput\undefined%
+    #1%
+  \else%
+    \global\advance \contentlinecnt by 1%
+    \pdfstartlink attr {/Border [0 0 0]} goto num \the\contentlinecnt%
+    \setcolor\cmykViolet #1\setcolor\cmykBlack\pdfendlink%
+  \fi%
+  } \leaders\hbox to.6em{\hfil .\hfil}\hfill\hbox to\contentnumwidth{\hfill#3}\par
+  \smallskip
+}
+
+%% references
+
+\newcount\numeq
+\newcount\eqalignnomode
+\newcount\captionmode
+\newcount\tabcaptionmode
+\newcount\footnotemode
+\newcount\bibitemmode
+\let\bibcaption=\relax
+\newcount\secnum
+\newcount\subsecnum
+\numeq=0\eqalignnomode=0\captionmode=0\tabcaptionmode=0\footnotemode=0
+
+\def\refdef#1#2{%
+  \expandafter\def\csname label:#1\endcsname{#2}%
+}
+
+\softinput{\jobname.ref}
+\newwrite\refs
+\immediate\openout\refs \jobname.ref
+
+\def\label#1{%
+  \ifmmode%
+    \global\advance\numeq by 1%
+    \eqno{(\the\numeq)}%
+    \immediate\write\refs{\string\refdef{#1}{(\the\numeq)}}%
+  \else\ifnum\eqalignnomode = 1%
+    \global\advance\numeq by 1%
+    (\the\numeq)%
+    \immediate\write\refs{\string\refdef{#1}{(\the\numeq)}}%
+  \else\ifnum\captionmode = 1%
+    \immediate\write\refs{\string\refdef{#1}{\the\figurenum}}%
+  \else\ifnum\tabcaptionmode = 1%
+    \immediate\write\refs{\string\refdef{#1}{\the\tablenum}}%
+  \else\ifnum\footnotemode = 1%
+    \immediate\write\refs{\string\refdef{#1}{$^{\the\footnotecnt}$}}%
+  \else\ifnum\bibitemmode = 1%
+    \immediate\write\refs{\string\refdef{#1}{\bibitemref{\bibcaption}}}%
+% these three are for a book style
+  \else\ifnum\appendixcnt > 0%
+    \immediate\write\refs{\string\refdef{#1}{\Alph\appendixcnt}}%
+  \else\ifnum\articlecnt = 0%
+    \immediate\write\refs{\string\refdef{#1}{\the\chaptercnt}}%
+  \else\ifnum\sectioncnt = 0%
+    \immediate\write\refs{\string\refdef{#1}{\the\chaptercnt.\the\articlecnt}}%
+  \else\ifnum\subsectioncnt = 0%
+    \immediate\write\refs{\string\refdef{#1}{\the\chaptercnt.\the\articlecnt.\the\sectioncnt}}%
+  \else\ifinner%
+    \global\advance\numeq by 1%
+    (\the\numeq)%
+    \immediate\write\refs{\string\refdef{#1}{(\the\numeq)}}%
+  \else%
+    \immediate\write\refs{\string\refdef{#1}{\the\secnum.\the\subsecnum}}%
+  \fi\fi\fi\fi\fi\fi\fi\fi\fi\fi\fi%
+}
+
+\def\pagelabel#1{%
+  \write\refs{\string\refdef{#1}{\the\pageno}}%
+}
+
+\def\ref#1{%
+  \expandafter\ifx\csname label:#1\endcsname\relax%
+    \message{Warning: label #1 undefined.}%
+    ??%
+  \else%
+    \csname label:#1\endcsname%
+  \fi%
+}
+
+\let\eqalignnoold=\eqalignno
+\def\eqalignno#1{%
+  \eqalignnomode=1%
+  \eqalignnoold{#1}%
+  \eqalignnomode=0%
+}
+
+%% bibliography
+
+\newcount\bibnum
+\bibnum=0
+\def\bibliography{\vskip\baselineskip\begingroup\smallfonts\baselineskip=\smallbaselineskip}
+\def\endbibliography{\endgroup\vskip\baselineskip}
+\def\bibitem#1#2#3#4{%
+  \global\advance\bibnum by 1%
+  \bibitemnum{\the\bibnum}{#1}{#2}{#3\label{#4}}
+}
+\def\bibitemref#1{[#1]}
+\let\bibref=\ref
+%\def\bibdot{.}
+\def\bibdot{}
+\def\bibitemnum#1#2#3#4{%
+  \bibitemmode=1%
+  \gdef\bibcaption{#1}%
+  \noindent\hangindent 22.5pt\hangafter 1%
+  \hbox to 18pt{\hfil \bibitemref{#1}}%
+  \kern 4pt%
+  \thebibitem{#2}{#3}{#4}
+  \par\vskip-\parskip%
+  \bibitemmode=0%
+}
+\def\thebibitem#1#2#3{%
+  {\sc #1}%
+  \if:#1:\else\if:#2:, \else\ \kern.4pt \fi\fi%
+  \if:#2:\else{\it #2\bibdot\/} \fi%
+  #3%
+}
+\def\urlref#1#2{\noindent\catcode`\~=12\relax{\web #1} | #2\par\vskip-\parskip\catcode`\~=\active}
+\def\etal{aj.}
+\def\ie{i.$\!$ e.}
+\def\editor{Editor }
+\def\editors{Editoøi }
+\def\vol#1{{\bf #1}}
+\def\online{{\rm\ [online]}}
+\def\cited#1{[cit.~#1]}
+\def\isbn#1{ISBN #1}
+\def\issn#1{ISSN #1}
+\def\n#1,{{\sc #1},}
+\def\mag#1{{\it #1\/}}
+\def\and#1{a}
+
+\def\bibitema#1#2#3{\begingroup\def\bibdot{{\rm .}}\bibitem{#1}{{\rm #2}}{#3}\endgroup}
+
+\def\bibline#1{%
+  \bibitemmode=1%
+  \nobreak
+  \noindent
+  \line{\hbox to 22.5pt{\hfil}#1\hfil}%
+  \par
+  \vskip-\parskip
+  \bibitemmode=0%
+}
+
+%% figures
+
+\newdimen\tmpdim
+\def\pdfwd{}\def\pdfht{}
+\def\imgxsize#1{\epsfxsize=#1\epsfysize=0pt\gdef\pdfwd{ width #1 }}
+\def\imgysize#1{\epsfysize=#1\epsfxsize=0pt\gdef\pdfht{ height #1 }}
+\let\figureamount=\bigskipamount
+
+\def\img#1{%
+  \ifx\pdfoutput\undefined
+    \hbox{\epsfbox{#1.eps}}%
+  \else%
+    \openin\softread #1.pdf
+    \ifeof\softread
+      \closein\softread
+      \openin\softread #1.png
+      \ifeof\softread
+        \closein\softread
+        \hbox{\pdfximage\pdfwd\pdfht{#1.jpg}}%
+      \else
+        \closein\softread
+        \hbox{\pdfximage\pdfwd\pdfht{#1.png}}%
+      \fi
+    \else
+      \closein\softread
+      \hbox{\pdfximage\pdfwd\pdfht{#1.pdf}}%
+    \fi
+    \pdfrefximage\pdflastximage
+  \fi%
+  \gdef\pdfwd{}%
+  \gdef\pdfht{}%
+}
+
+\newcount\figurenum
+\let\figurecaption=\relax
+\def\caption#1{\global\advance\figurenum by 1\gdef\figurecaption{#1}}
+
+\newtoks\centercaptoks
+\centercaptoks{%
+  \leftskip=0pt plus 1fil%
+  \rightskip=0pt plus -1fil%
+  \parindent=0pt%
+  \parfillskip=0pt plus 2fil%
+}
+
+\def\obr{Obr.}
+\def\figure#1{%
+  \captionmode=1%
+  \bigskip%
+  \begingroup%
+  \setbox0=\hbox{#1}%
+  \ifdim\wd0>0.95\hsize
+    \noindent\hbox to\hsize{\hss\box0\hss}%
+  \else
+    \noindent\hbox to\hsize{\kern.8pt\setgray\vrule\setblack\hss \box0\hss\setgray\vrule\setblack\kern.8pt}%
+  \fi
+  \ifx\figurecaption\relax%
+  \else%
+    \par%
+    \nobreak%
+    \medskip%
+    \the\centercaptoks
+    \baselineskip=\smallbaselineskip%
+    {\smallfonts {\obrtab\obr~{\the\figurenum}} --- \figurecaption}%
+    \global\let\figurecaption=\relax%
+  \fi%
+  \bigskip%
+  \endgroup%
+  \captionmode=0%
+}
+
+\def\figs#1#2{%
+  \imgxsize{#2}%
+  \figure{%
+    \img{figs/#1}%
+    \label{#1}%
+  }%
+}
+
+\def\placecaption{%
+  \ifx\figurecaption\relax\else
+    \captionmode=1%
+    \baselineskip=\smallbaselineskip%
+    \noindent{\smallfonts{\obrtab\obr~{\the\figurenum}} --- \figurecaption}%
+    \global\let\figurecaption=\relax%
+    \smallskip%
+    \baselineskip=\normalbaselineskip%
+    \captionmode=0%
+  \fi%
+}
+
+\def\placetitlecaption{%
+  \captionmode=1%
+  \baselineskip=\smallbaselineskip%
+  \noindent{\smallfonts{{\bf Titulní strana} --- \figurecaption}}%
+  \global\let\figurecaption=\relax%
+  \smallskip%
+  \baselineskip=\normalbaselineskip%
+  \global\advance\figurenum by -1%
+  \captionmode=0%
+}
+
+\def\placecaptioncentered{%
+  \captionmode=1%
+  \baselineskip=\smallbaselineskip%
+  \setbox0=\hbox{\smallfonts {\obrtab\obr~{\the\figurenum}} --- \figurecaption}%
+  \ifnum\wd0 < \hsize%
+    \centerline{\box0}%
+  \else
+    \noindent{\unhbox0}%
+  \fi
+  \global\let\figurecaption=\relax%
+  \smallskip%
+  \baselineskip=\normalbaselineskip%
+  \captionmode=0%
+}
+
+\def\placecaptionfigure{%
+  \ifx\figurecaption\relax%
+  \else%
+    \captionmode=1%
+    \par%
+    \nobreak%
+    \smallskip%
+    \the\centercaptoks
+    \baselineskip=\smallbaselineskip%
+    {\smallfonts \ifx\obr\empty\else{\obrtab\obr~{\the\figurenum}} --- \fi\figurecaption}%
+    \global\let\figurecaption=\relax%
+    \captionmode=0%
+  \fi%
+}
+
+\newdimen\framesep
+\framesep=10pt
+\long\def\frame#1{%
+  \hbox{%
+    \vrule%
+    \vbox{%
+      \hrule%
+      \vskip\framesep%
+      \hbox{%
+        \kern\framesep%
+        #1%
+        \kern\framesep%
+      }%
+      \vskip\framesep%
+      \hrule%
+    }%
+    \vrule%
+  }%
+}
+
+\def\figureframe#1{%
+  \bigskip%
+  \noindent\hbox to\hsize{\hfil\frame{#1}\hfil}\par%
+  \bigskip%
+}
+
+\newbox\figparbox
+\newdimen\figparwd
+\newdimen\figparht
+\def\figureleft#1#2{%
+  \setbox\figparbox=\hbox{#1}%
+  \figparwd=\wd\figparbox%
+  \figparht=\ht\figparbox%
+  \advance\figparwd by\framesep%
+  \leavevmode\hangafter-#2\hangindent\figparwd%
+  \advance\figparht by-10pt%
+  \vadjust{\noindent\smash{\lower\figparht\hbox to 0pt{\box\figparbox\hss}}}%
+  \ignorespaces%
+}
+
+\def\figureright#1#2{%
+  \setbox\figparbox=\hbox{#1}%
+  \figparwd=\wd\figparbox%
+  \setbox\figparbox=\hbox{%
+    \vbox{%
+       \hsize=\figparwd%
+       \box\figparbox%
+       \placecaptionfigure%
+    }%
+  }%
+  \figparht=\ht\figparbox%
+  \advance\figparwd by\framesep
+  \leavevmode\hangafter-#2\hangindent-\figparwd%
+  \advance\figparht by-8pt%
+  \advance\figparwd by-\hsize%
+  \advance\figparwd by-\framesep%
+  \vadjust{\noindent\smash{\kern-\figparwd\lower\figparht\hbox to 0pt{\box\figparbox\hss}}}%
+  \ignorespaces%
+}
+
+\newbox\capbx
+\newbox\capcapbx
+\newdimen\capsep
+\capsep=.3cm
+\newtoks\captoks
+\captoks={\leftskip=0pt\rightskip=0pt\parindent=0pt}
+\def\figurecaprt#1{%
+  \captionmode=1%
+  \begingroup%
+  \bigskip%
+  \setbox\capbx\hbox{#1}%
+  \ifx\figurecaption\relax%
+    \setbox\capcapbx=\hbox{}% 
+  \else%
+    \setbox\capcapbx=\hbox{\vbox to\ht\capbx{\advance\hsize by -\wd\capbx\advance\hsize by -\capsep%
+      \the\captoks%
+      \baselineskip=\smallbaselineskip%
+      {\smallfonts {\obrtab\obr~{\the\figurenum}} --- \figurecaption}%
+      \global\let\figurecaption=\relax%
+      \vfill%
+    }}%
+  \fi%
+  \ifodd\pageno
+    \noindent\box\capcapbx\kern\capsep\box\capbx%
+  \else
+    \noindent\box\capbx\kern\capsep\box\capcapbx%
+  \fi
+  \bigskip%
+  \endgroup%
+  \captionmode=0%
+}
+
+\def\figurecaplrt#1{%
+  \captionmode=1%
+  \begingroup%
+  \bigskip%
+  \setbox\capbx\hbox{#1}%
+  \ifx\figurecaption\relax%
+    \setbox\capcapbx=\hbox{}% 
+  \else%
+    \setbox\capcapbx=\hbox{\vbox to\ht\capbx{\advance\hsize by -\wd\capbx\advance\hsize by -\capsep%
+      \vfill%
+      \the\captoks%
+      \baselineskip=\smallbaselineskip%
+      {\smallfonts {\obrtab\obr~{\the\figurenum}} --- \figurecaption}%
+      \global\let\figurecaption=\relax%
+      \vskip0pt
+    }}%
+  \fi%
+  \ifodd\pageno
+    \noindent\box\capcapbx\kern\capsep\box\capbx%
+  \else
+    \noindent\box\capbx\kern\capsep\box\capcapbx%
+  \fi
+  \bigskip%
+  \endgroup%
+  \captionmode=0%
+}
+
+%% tables
+
+\newcount\tablenum
+\newdimen\normalparindent
+\let\tablecaption=\relax
+\def\tabcaption#1{\tabcaptionmode=1\global\advance\tablenum by 1\gdef\tablecaption{#1}\tabcaptionmode=0}
+\def\thetablecaption#1#2{\tabcaptionmode=1{\smallfonts {\obrtab Tab.~#1} --- #2}\tabcaptionmode=0}%
+\def\placetablecaption{%
+  \begingroup%
+    \par%
+    \nobreak%
+    \medskip%
+    \normalparindent=\parindent%
+%    \leftskip=0pt\rightskip=0pt\parindent=0pt%
+    \the\centercaptoks
+    \baselineskip=\smallbaselineskip%
+    \thetablecaption{\the\tablenum}{\tablecaption}\par
+    \global\let\tablecaption=\relax%
+  \endgroup
+}
+\def\table#1{%
+  \tabcaptionmode=1%
+  \begingroup%
+  \bigskip%
+  \centerline{%
+    \hbox{%
+      \vbox{%
+        #1%
+      }%
+    }%
+  }%
+  \ifx\tablecaption\relax%
+  \else%
+    \placetablecaption
+  \fi%
+  \bigskip%
+  \endgroup%
+  \tabcaptionmode=0%
+}
+
+% table caption, centered if narrower than \hsize
+\def\placetabcaption{%
+  \begingroup
+  \def\obr{Tab.}
+  \let\figurenum=\tablenum
+  \let\figurecaption=\tablecaption
+  \placecaptioncentered
+  \endgroup
+  \global\let\tablecaption=\relax
+}
+
+%% articles, sections, subsections, paragraphs
+
+\catcode`*=11
+\newdimen\articlewd
+
+\def\addpdfdestoutline#1{%
+  \ifx\pdfoutput\undefined\else%
+    \begingroup
+      \def\uv {}%
+      \def~{ }%
+      \pdfdest num \the\pdfdestcnt fitbh%
+      \pdfoutline goto num \the\pdfdestcnt count 0 {#1}%
+    \endgroup
+  \fi%
+}
+% \addcontentline with hyperref's (without \article)
+\def\addcontentline*#1#2#3{%
+  \addpdfdestoutline{#1}%
+  \addcontentline{#1}{#2}{#3}%
+}
+
+\def\article*#1#2{%
+  \gdef\authorname{#2}%
+  \setbox0=\hbox{\articlefnt #1}%
+  \setbox1=\hbox{#2}%
+  \articlewd=\wd0%
+  \dp0=0pt%
+  \dp1=0pt%
+  \advance\articlewd by \wd1%
+  \bigskip
+  \vbox{
+    \ifnum\addcontentmode=1%
+      \addpdfdestoutline{#1}%	% inside the \vbox due to pagebreak
+    \fi
+    \ifdim\articlewd<\hsize
+      \line{\box0\hfil\box1}%
+      \vbox to\bigskipamount{\vss\hbox to\hsize{\imgxsize{\hsize}\img{pruh_uzky}}\vskip2pt}%
+    \else\ifdim\wd0>\hsize
+      \vbox{%
+        \rightskip=0pt plus 1fil%
+        \baselineskip=14pt%
+        \noindent{\articlefnt #1}\par%
+      }
+      \smallskip
+      \hfill\box1
+      \smallskip
+      \hrule
+    \else
+      \line{\box0\hfill}%
+      \smallskip
+      \line{\hfill\box1}%
+      \vbox to\bigskipamount{\vss\hbox to\hsize{\imgxsize{\hsize}\img{pruh_uzky}}\vskip2pt}%
+    \fi\fi
+%    \smallskip
+    \vskip1pt
+  }%
+  \par\nobreak
+}
+
+\newcount\articlecnt
+\articlecnt=0
+\newcount\pdfdestcnt
+\pdfdestcnt=0
+\newcount\addcontentmode
+\addcontentmode=0
+
+% article with possibly different content-line
+\def\articlecontentline#1#2#3{%
+  \global\advance \articlecnt by 1%
+  \global\advance \pdfdestcnt by 1%
+  \global\addcontentmode=1%
+  \article*{#1}{#3}%
+  \global\addcontentmode=0%
+  \addcontentline{#2}{#3}{\the\pageno}%
+  \nobreak%
+}
+\def\article#1#2{%
+  \articlecontentline{#1}{#1}{#2}%
+}
+
+\def\endarticle{}
+
+\def\section#1{\bigskip\noindent{\sectionfnt #1\hfill\raise1pt\hbox{$*$}}\par\nobreak\bigskip\nobreak}
+
+\def\pardot{}
+\def\paragraph#1{\bigskip\noindent{\paragraphfnt #1\pardot}}
+
+%% footnotes
+
+\newcount\footnotecnt
+\footnotecnt=0
+\newdimen\footnotedim
+\def\efootnote#1#2{%
+  \footnotemode=1%
+  \begingroup%
+  \baselineskip=\smallbaselineskip%
+  \setbox\strutbox=\hbox{\vrule height7.083pt depth2.917pt width0pt}%
+  \footnote{#1}{{\smallfonts #2}}%
+  \endgroup%
+  \footnotemode=0%
+}
+\def\myfootnote#1{\global\advance\footnotecnt by 1\efootnote{$^{\the\footnotecnt}$}{#1}}
+
+%% header, footer
+
+\def\footer#1#2#3#4{
+  \leavevmode
+  \vfill
+  \hrule
+  \medskip
+  \begingroup
+  \smallfonts
+  \baselineskip=\smallbaselineskip
+  \centerline{Povìtroò \povetronno/\povetronyear; Hradec Králové, \povetronyear.}
+  \centerline{Vydala: {\bf Astronomická spoleènost v~Hradci Králové} (#1 na #2.~setkání ASHK)}
+  \centerline{ve spolupráci s~{\bf Hvìzdárnou a planetáriem v~Hradci Králové}}
+  \centerline{vydání
+    1.,
+    #3 stran,
+    náklad #4~ks;
+    dvoumìsíèník,
+    MK~ÈR~E~13366, ISSN~1213--659X}
+  \centerline{Redakce: Miroslav Bro¾, Martin Cholasta, Josef Kujal, Martin Lehký,}
+  \centerline{Miroslav Ouhrabka, Lenka Trojanová a Milo¹ Boèek}
+  \centerline{Pøedplatné ti¹tìné verze: vyøizuje redakce, cena 35,--~Kè za èíslo (vèetnì po¹tovného)}
+  \centerline{Adresa: ASHK, Národních muèedníkù 256, Hradec Králové 8, 500\,08; IÈO: 64810828}
+  \centerline{e--mail: \mail{ashk@ashk.cz}, web: \url{http://www.ashk.cz}}
+  \endgroup
+  \footline{\hfil}
+  \eject
+}
+
+%% title and last pages
+
+\newdimen\titlevoffset
+\newdimen\titlevsize
+\newdimen\lastpagevoffset
+\newdimen\lastpagevsize
+\titlevoffset=-5mm
+\titlevsize=11mm
+\lastpagevoffset=-3mm
+\lastpagevsize=\titlevsize\advance\lastpagevsize by\titlevoffset
+
+\def\titletype{
+  \advance\voffset by \titlevoffset
+  \advance\vsize by \titlevsize
+% additional fonts
+  \font\subtitlefnta=csr10
+  \font\subtitlefntb=csbx10
+  \font\subtitlefntc=csr8
+%
+  \line{\titlefnt P\hfil O\hfil\kern-4pt V\hfil Ì\hfil T\hfil R\hfil\kern-4pt O\hfil\kern-1pt Ò}
+  \vskip.1cm
+  \hbox to\hsize{\imgxsize{\hsize}\img{pruh}\hss}
+  \hbox to\hsize{%
+%    {\subtitlefnta Èasopis o\ astronomii a\ pøíbuzných oborech
+    {\subtitlefnta Královéhradecký astronomický èasopis
+    \hfil
+    \raise1pt\hbox{$*$}
+    \hfil
+    roèník {\subtitlefntb \povetronvol}%
+    \hfil
+    \raise1pt\hbox{$*$}
+    \hfil
+    èíslo {\subtitlefntb\povetronno}\raise1.2pt\hbox{\subtitlefntc /}{\subtitlefntb\povetronyear}}%
+  }%
+%  \smallskip\hrule
+  \vskip15pt
+}
+
+\def\povetronyear{????}
+\def\povetronno{?}
+
+\def\title#1#2#3{
+  \def\povetronvol{#1}
+  \def\povetronyear{#2}
+  \def\povetronno{#3}
+  \begingroup
+  \titletype
+}
+
+\def\endtitle{
+  \vfill
+%  \hrule
+  \eject
+  \endgroup
+}
+
+\def\titlespec#1#2#3#4{
+  \def\povetronvol{#1}
+  \def\povetronyear{#2}
+  \def\povetronno{S#3}
+  \def\titlespecial{#4}
+  \begingroup
+  \let\titlefnt=\titlespecfnt
+  \titletype
+  \vfill
+  \centerline{{\specialfnt\titlespecial}}%
+}
+
+\def\titlefigure#1{\centerline{#1}}
+
+\def\pagenumbers{%
+  \footline{%
+    \ifodd\pageno%
+      {\raise1pt\hbox{$*$}\hfil {\smallfonts {\sc Povìtroò} \povetronno/\povetronyear}\qquad {\tenbf\folio}}%
+    \else%
+      {{\tenbf\folio}\qquad {\smallfonts {\sc Povìtroò} \povetronno/\povetronyear}\hfil\raise1pt\hbox{$*$}}%
+    \fi%
+  }%
+}
+
+\def\lastpage{
+  \vfill\eject
+  \advance\voffset by \lastpagevoffset
+  \advance\vsize by \lastpagevsize
+  \nopagenumbers
+}
+
+%% abbreviations
+
+\def\poznred#1{ (#1 --- pozn.$\!$ red.)}
+\def\poznprekl#1{ (#1 --- pozn.$\!$ pøekl.)}
+
+\def\notice#1{%
+  \bigskip%
+  {\noindent{\noticeitfnt Poznámka:} {\noticefnt #1}}%
+}
+
+\def\subfig#1{(#1)}
+\def\vlevo{\subfig{a}}
+\def\vpravo{\subfig{b}}
+
+\def\pokracovani{\smallskip\line{\hfill{\scfnt Pokraèování}}}
+\def\dokonceni{\smallskip\line{{\scfnt Dokonèení}\hfil}}
+\def\dokonceniz#1#2{\smallskip\line{{\scfnt Dokonèení} z~èísla #1/#2\hfil}}
+
+\def\authors#1{%
+  \begingroup%
+  \smallskip%
+  \baselineskip=\smallbaselineskip%
+  {\smallfonts #1}%
+  \smallskip%
+  \endgroup%
+}
+
+\def\abstract#1{%
+  \noindent{\scfnt Abstrakt:} #1%
+  \medskip%
+}
+
+\def\abstracten#1{%
+  \noindent{\scfnt Abstract:} #1%
+  \medskip%
+}
+
+\def\introduction{\noindent {\scfnt Slovo úvodem.}\ }
+\def\sign#1{\medskip\line{\hfil #1}}
+
+\chardef\backsl=`\\
+\chardef\tlde=`\~
+\chardef\undrsc=`\_
+\chardef\hash=`\#
+\chardef\rozdel=`\-
+\chardef\prcnt=`\%
+\chardef\amprs=`\&
+
+\def\file#1{{\tt #1}}
+\def\cp{è.~p.}
+
+% make urls and e-mails active in PDF (use \noexpand ~)
+
+\def\urltxt#1#2{%
+  \ifx\pdfoutput\undefined%
+    #1%
+  \else%
+    \pdfstartlink attr {/Border [0 0 0]} user{/Subtype /Link /A << /Type /Action /S /URI /URI (#2) >>}%
+    \setcolor\cmykViolet #1\setcolor\cmykBlack\pdfendlink%
+  \fi%
+}
+
+\def\urlbib#1#2{$\langle\kern.5pt$\urltxt{{\web #1}}{#2}$\kern.5pt\rangle$}
+\def\url#1{\urlbib{#1}{#1}}
+\def\mail#1{\urlbib{#1}{mailto:#1}}
+
+\def\povrefurl#1#2#3#4{%
+  \ifx\pdfoutput\undefined%
+     #1%
+  \else%
+    \pdfstartlink attr {/Border [0 0 0]} goto file{povetron-#2-#3.pdf} page #4 {/Fit}%
+    \setcolor\cmykViolet #1\setcolor\cmykBlack\pdfendlink%
+  \fi%
+}
+
+%% verbatim environment
+
+\def\makeother#1{\catcode`#1=12\relax}
+\def\verbtt#1{%
+  \begingroup%
+  \let\oldpar=\par\def\par{\oldpar\leavevmode}%
+  \let\do\makeother \dospecials%
+  \tt \obeylines \obeyspaces \parskip0pt \parindent0pt \baselineskip=11pt%
+  \def\temp ##1#1{\leavevmode##1\endgroup}\temp%
+}
+
+%% errata
+
+\def\err#1#2#3#4{%
+  \begingroup
+  \smallfonts%
+  \baselineskip=\smallbaselineskip%
+  \noindent\hangindent\tmpdim\hangafter 1%
+  \hbox to .75\errdim{\hfil #1}%
+  \hbox to\errdim{\hfil #2}%
+  \hbox to 1.5\errdim{\hfil #3}%
+  \hbox to .2cm{\hfil :}\hskip.3cm #4%
+  \par%
+  \endgroup
+}
+
+\newdimen\errdim
+\newbox\tmpbox
+
+\def\errata#1{
+  \vsize=210mm
+  \voffset=-1in
+  \parskip=0pt
+
+  \def\corr{$\rightarrow$}
+
+  \errdim=.5cm
+  \tmpdim=3.25\errdim
+  \advance\tmpdim by .5cm
+
+  \setbox\tmpbox=\hbox\bgroup\vbox to.495\vsize\bgroup
+    \leavevmode
+    \vskip1.5cm
+    \centerline{{\subtitlefnt ERRATA} --- Povìtroò #1}
+    \bigskip
+    \noindent{\smallfonts strana, odstavec, øádek (dole): oprava}
+    \smallskip
+    \hrule
+    \medskip
+}
+
+\def\enderrata{
+    \vfill
+  \egroup\egroup
+
+  \copy\tmpbox
+  \copy\tmpbox
+  \vfill
+  \eject
+
+  \copy\tmpbox
+  \copy\tmpbox
+}
+
+%% an electronic version box
+
+\newbox\tmpbox
+\def\eversion{%
+  \setbox\tmpbox=\vbox{%
+    \hsize=.475\hsize
+    \noindent
+    \centerline{Elektronická verze èasopisu Povìtroò}
+    \centerline{je k~dispozici na webové adrese:}
+%
+    \smallskip
+%
+%    \centerline{\url{http://www.astrohk.cz/ashk/povetron/}}%
+    \centerline{\url{http://www.ashk.cz/povetron/}}%
+  }
+
+  \vskip.5cm
+  \begingroup
+    \framesep=2mm
+    \figureframe{\hbox{\box\tmpbox}}
+  \endgroup
+}
+
+% inserts of figures
+\let\oldtopinsert=\topinsert
+\let\oldpageinsert=\pageinsert
+\let\oldendinsert=\endinsert
+\def\topinsert{\oldtopinsert\vskip-\figureamount}
+\def\pageinsert{\oldpageinsert\vskip-\figureamount}
+\def\endinsert{\vskip-\figureamount\oldendinsert}
+
+% itemize
+\newcount\itemcnt
+
+\def\beginitem{%
+  \medskip
+  \begingroup
+  \itemcnt=0
+}
+
+\def\enditem{%
+  \endgroup
+  \medskip
+}
+
+\def\myitem{\advance\itemcnt by 1\item{(\the\itemcnt)}}
+
+\def\name#1{{\sc #1}}
+
+\def\paragraphq#1{\begingroup\def\pardot{}\paragraph{#1}\endgroup}
+
+% PS/PDF colors
+\def\setcolorpspdf#1{\ifx\pdfoutput\undefined \special{ps: #1 setcmykcolor}\else \pdfsetcolor{#1}\fi}
+\def\setblack{\setcolorpspdf{0 0 0 1}}
+\def\setwhite{\setcolorpspdf{0 0 0 0}}
+\def\setgray{\setcolorpspdf{0.5 0.5 0.5 0}}
+\def\setred{\setcolorpspdf{0.3 1 1 0}}
+\def\setyellow{\setcolorpspdf{0 0.3 1 0}}
+\def\setgreen{\setcolorpspdf{1 0.3 1 0}}
+\def\setblue{\setcolorpspdf{1 1 0.3 0}}
+\def\setviolet{\setcolorpspdf{0.5 1 0.1 0}}
+\def\setdarkviolet{\setcolorpspdf{0.75 1.0 0.2 0}}
+
+% optional vakat
+%\softinput{vakat.tex}
+
+% ruzne doplnky
+\let\fig=\figure
+\def\idx#1{#1}
+\def\idxem#1{{\em #1}}
+\def\index#1{}
+\def\idximg#1{}
+
+\def\verbttsmall#1{%
+  \begingroup%
+  \smallfonts%
+  \baselineskip=9pt%
+  \begingroup%
+  \let\oldpar=\par\def\par{\oldpar\leavevmode}%
+  \let\do\makeother \dospecials%
+  \tt \obeyspaces \obeylines \parskip0pt \parindent0pt%
+  \def\temp ##1#1{\leavevmode##1\endgroup\par\endgroup}\temp%
+}
+
+\def\parr{\hfil\break\indent}
+
+\long\def\mynote#1{%
+  \begingroup
+  \medskip
+  \smallfonts
+  \baselineskip=\smallbaselineskip
+  \abovedisplayskip=\smallbaselineskip
+  \belowdisplayskip=\smallbaselineskip
+  #1
+  \medskip
+  \endgroup
+}
+
+\def\beginitemb{%
+  \medskip
+  \begingroup
+  \itemcnt=-2
+}
+
+\def\myitem{%
+  \ifnum\itemcnt>-2%
+    \advance\itemcnt by 1\item{\the\itemcnt.}%
+  \else
+    \item{--}%
+  \fi
+}
+
+\def\hm#1#2{#1\,{\rm h}\,#2\,{\rm min}}
+\def\hms#1#2#3{#1\,{\rm h}\,#2\,{\rm min}\,#3\,{\rm s}}
+\def\dm#1#2#3{\ifmmode #1^\circ\,#2'\else $#1^\circ\,#2'$\fi}
+\def\dms#1#2#3{\ifmmode #1^\circ\,#2'\,#3''\else $#1^\circ\,#2'\,#3''$\fi}
+
+\def\figrt#1#2#3#4{\imgxsize{#2}\figureright{\hbox{\vbox{\ifx:#4:\else\vskip#4\fi\img{#1}}}}{#3}}
+
+% jednoduche tabulky
+\newtoks\schemata
+\newdimen\tbs
+
+\def\addschema#1{\schemata\expandafter{\the\schemata#1}}
+
+\def\addseparator{\ifx\params\empty\else\addschema&\fi}
+
+\def\vemznak#1#2;{\def\params{#2}\csname P:#1\endcsname}
+
+\expandafter\def\csname P:c\endcsname{\addschema{\hfil\ ##\hfil}\addseparator}
+\expandafter\def\csname P:r\endcsname{\addschema{\hfil\ ##}\addseparator}
+\expandafter\def\csname P:l\endcsname{\addschema{\ ##\hfil}\addseparator}
+\expandafter\def\csname P:|\endcsname{\addschema{\vrule\hskip0\tbs}}
+\expandafter\def\csname P:C\endcsname{\addschema{\vrule\hfil\ ##\hfil\vrule}\addseparator}
+\expandafter\def\csname P:R\endcsname{\addschema{\vrule\hfil\ ##\vrule}\addseparator}
+\expandafter\def\csname P:L\endcsname{\addschema{\vrule\ ##\hfil\vrule}\addseparator}
+
+\def\genschemata{\ifx\params\empty\else\expandafter\vemznak\params;\expandafter\genschemata\fi}
+
+\tbs=.0em
+\let\\=\cr
+\def\hline{\noalign{\hrule}}
+
+\def\tabular#1#2{%
+  \table{%
+    \begingroup
+    \offinterlineskip
+    \schemata={\tabskip=2\tbs \strut}
+    \def\params{#1}%
+    \genschemata
+    \message{\the\schemata}
+    \tabskip=\tbs
+    \halign{%
+      \span\the\schemata \tabskip=\tbs \cr
+      #2\crcr
+    }%
+    \endgroup
+  }%
+}
+
+%% \end of povetron.tex
+

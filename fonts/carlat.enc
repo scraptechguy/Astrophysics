@@ -1,0 +1,92 @@
+%   These are the ligs and kerns in addition to those found in the
+%   AFM file.  (The only ligs in the Times-Roman.afm file are the
+%   fi and fl ligatures.)
+%
+% LIGKERN space l =: lslash ; space L =: Lslash ;
+% LIGKERN question quoteleft =: questiondown ; exclam quoteleft =: exclamdown ;
+% LIGKERN hyphen hyphen =: endash ; endash hyphen =: emdash ;
+% LIGKERN quoteleft quoteleft =: quotedblleft ;
+% LIGKERN quoteright quoteright =: quotedblright ;
+%
+%   We blow away kerns to and from spaces (TeX doesn't have a
+%   space) and also remove any kerns from the numbers (although
+%   the only kern pair that mentions a number in Times-Roman.afm
+%   is one one.)
+%
+% LIGKERN space {} * ; * {} space ; 0 {} * ; * {} 0 ;
+% LIGKERN 1 {} * ; * {} 1 ; 2 {} * ; * {} 2 ; 3 {} * ; * {} 3 ;
+% LIGKERN 4 {} * ; * {} 4 ; 5 {} * ; * {} 5 ; 6 {} * ; * {} 6 ;
+% LIGKERN 7 {} * ; * {} 7 ; 8 {} * ; * {} 8 ; 9 {} * ; * {} 9 ;
+% LIGKERN comma comma =: quotedblbase ; less less =: guillemotleft ;
+% LIGKERN greater greater =: guillemotright ;
+%
+%   0x18 should be a small zero which you can put after a percent sign
+%   to make it look like perthousand, but since that character is not
+%   available and perthousand is, we put perthousand into 0x18 and add
+%   a ligature to achieve the same result.
+% 
+% LIGKERN percent perthousand =: perthousand ;
+% LIGKERN f i =: fi ;
+% LIGKERN f l =: fl ;
+%
+% /currency  /logicalnot /mu /periodcentered
+/CaronEncoding [          % now 256 chars follow
+% 0x00
+  /braceleft  /braceright /less  /greater
+  /guillemotleft /guillemotright /quotesinglbase  /quotedblbase
+  /ellipsis /perthousand /onehalf /onequarter /fi /fl
+  /onesuperior /threequarters
+% 0x10
+  /dotlessi /plusminus /grave  /acute  /caron /breve  /bar  /ring
+  /cedilla /germandbls /ae /oe /oslash  /AE /OE /Oslash
+% 0x20
+  /space /exclam /quotedblright /numbersign
+  /dollar /percent /ampersand /quoteright
+  /parenleft /parenright /asterisk /plus /comma /hyphen /period /slash
+% 0x30
+  /zero /one /two /three /four /five /six /seven
+  /eight /nine /colon /semicolon /exclamdown /equal /questiondown /question
+% 0x40
+  /at /A /B /C /D /E /F /G /H /I /J /K /L /M /N /O
+% 0x50
+  /P /Q /R /S /T /U /V /W
+  /X /Y /Z /bracketleft /quotedblleft /bracketright /circumflex /underscore
+% 0x60
+  /quoteleft /a /b /c /d /e /f /g /h /i /j /k /l /m /n /o
+% 0x70
+  /p /q /r /s /t /u /v /w
+  /x /y /z  /endash /emdash  /hungarumlaut /tilde /dieresis
+% 0x80
+  /.notdef /.notdef /.notdef /.notdef /.notdef /.notdef /.notdef /.notdef
+  /.notdef /.notdef /.notdef /.notdef /.notdef /perthousand /.notdef /.notdef
+% 0x90
+  /.notdef /.notdef /.notdef /.notdef /.notdef /.notdef /.notdef /.notdef
+  /.notdef /.notdef /.notdef /.notdef /hyphen /.notdef /guillemotleft /guillemotright
+% 0xA0
+  /.notdef /.notdef /.notdef /.notdef /.notdef /Lquoteright /.notdef /copyright
+  /.notdef /Scaron /.notdef /Tcaron /.notdef /.notdef /Zcaron /.notdef
+% 0xB0
+  /.notdef /.notdef /.notdef /.notdef /.notdef /lquoteright /.notdef /.notdef
+  /.notdef /scaron /.notdef /tcaron
+  /.notdef /.notdef /zcaron /.notdef
+% 0xC0
+  /Racute /Aacute /.notdef /.notdef
+  /Adieresis /Lacute /.notdef /.notdef
+  /Ccaron /Eacute /Ecircumflex /Edieresis
+  /Ecaron /Iacute /.notdef /Dcaron
+% 0xD0
+  /.notdef /.notdef /Ncaron /Oacute /Ocircumflex
+  /.notdef /Odieresis /.notdef
+  /Rcaron /Uring /Uacute /.notdef
+  /Udieresis /Yacute /dagger /daggerdbl
+% 0xE0
+  /racute /aacute /.notdef /.notdef
+  /adieresis /lacute /.notdef /.notdef
+  /ccaron /eacute /ecircumflex /edieresis
+  /ecaron /iacute /.notdef /dcaron
+% 0xF0
+  /.notdef /.notdef /ncaron /oacute /ocircumflex
+  /.notdef /odieresis /.notdef
+  /rcaron /uring /uacute /.notdef
+  /udieresis /yacute /quotedblbase /quotedblleft
+] def

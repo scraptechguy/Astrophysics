@@ -1,0 +1,949 @@
+% kniha.tex
+% Makra pro knizni vydani katalogu slunecnich hodin.
+% Miroslav Broz (miroslav.broz@email.cz), 17. 6. 2003
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%% Obecna makra a promenne
+
+\def\protect{\noexpand\noexpand\noexpand}
+
+\newtoks\pagetoks
+\pagetoks={\the\pageno}
+
+\newcount\chaptercnt
+\chaptercnt=0
+
+\righthyphenmin=2
+
+% tracing parameters
+\showboxdepth=-1
+
+% rozliseni PDF obrazku (konverze mptopdf)
+\ifx\pdfoutput\udefined
+\else
+  \pdfimageresolution=72
+\fi
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%% Barvy v PostScriptu i PDF
+
+\def\setgray{%
+  \ifx\pdfoutput\undefined
+    \special{ps: 0.8 setgray}%
+%    \special{ps: 0 0 0 0.2 setcmykcolor}%
+  \else
+    \pdfsetcolor{0 0 0 0.2}%
+  \fi
+}
+
+\def\setblack{%
+  \ifx\pdfoutput\undefined
+    \special{ps: 0 setgray}%
+%    \special{ps: 0 0 0 1 setcmykcolor}%
+  \else
+    \pdfsetcolor\cmykBlack%
+  \fi
+}
+
+\def\setred{%
+  \ifx\pdfoutput\undefined
+%    \special{ps: 0.7 0 0 setrgbcolor}%
+    \special{ps: 0.3 1 1 0 setcmykcolor}%
+  \else
+    \pdfsetcolor{0.3 1 1 0}%
+  \fi
+}
+
+% uplne vynechani \mark pri \setcolor a \makeheadline pro plovouci zapati v cele knize
+\ifx\pdfoutput\undefined
+  \def\makeheadline{%
+    \vbox to 0pt{
+      \vskip-27.5pt%
+      \line{%
+        \vbox to 8.5pt{}%
+        \the\headline
+      }%
+      \vss
+    }%
+    \nointerlineskip
+  }%
+\else
+  \let\setcolor=\pdfsetcolor
+  \def\makeheadline{%
+    \vbox to 0pt{
+      \vskip-27.5pt%
+      \line{%
+        \vbox to 8.5pt{}%
+        \pdfsetcolor{\maincolor}%
+        \the\headline
+      }%
+      \vss
+    }%
+    \nointerlineskip
+  }%
+\fi
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%% Dalsi fonty pro knizni vydani
+
+\newcount\scl\scl=1000
+
+\font\titlefnta=phvb8z at 36pt
+\font\titlefntb=ptmr8z at 30.4pt
+\font\titlefntc=ptmri8z at 22.8pt
+\font\titlefntd=ptmr8z at 9.5pt
+\font\titlefnte=ptmr8z at 9.5pt
+\font\titlefntf=ptmr8z at 6.65pt
+\font\chapterfnt=csssbx10 at 24pt
+\font\articlefnt=csbx12
+\font\sectionfnt=csb10
+\font\paragraphfnt=csb10
+\font\mflogo=logo10 scaled \scl
+\font\ninemflogo=logo9 scaled \scl
+\font\tensf=csss10 scaled \scl
+
+\input amssym
+\font\tenmsa=msam10 scaled \scl	% AMSTeX symbols
+
+%% special fonts could be switched-off
+\ifnum\extrafonts=1
+  \font\znameni=\fontdir astro scaled 950
+  \font\znamenibig=\fontdir astro scaled 1900
+\else
+  \let\znameni=\relax
+  \let\znamenibig=\relax
+\fi
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%% Hlavicka a pata stranky
+
+\def\levezahlavi{}
+
+\def\pagenumbers{%
+  \global\headline{%
+    \ifodd\pageno%
+      \setbox2=\hbox to\hsize{\tensf\firstmark}%
+    \else%
+      \setbox2=\hbox to\hsize{\tensf\levezahlavi}%
+    \fi%
+    \dp2=0pt%
+    \ht2=10pt%
+    \vbox{%
+    \box2%
+    \medskip
+    \hrule
+    }%
+  }%
+  \global\footline{%
+    \ifodd\pageno%
+      {\hfil{\tenrm\folio}}%
+    \else%
+      {{\tenrm\folio}\hfil}%
+    \fi%
+  }%
+}
+
+\def\nopageheader{%
+  \headline{\hfil\pagenumbers}%
+  \footline{%
+    \ifodd\pageno%
+      {\hfil{\tenrm\folio}}%
+    \else%
+      {{\tenrm\folio}\hfil}%
+    \fi%
+  }%
+}
+
+\def\nopagenumbers{%
+  \headline{\hfil}%
+  \footline{\hfil}%
+}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%% Viceurovnovy obsah chapter/article/section/paragraph
+
+\newcount\wasparagraph
+\wasparagraph=0
+
+\def\contentline#1#2#3#4#5{%
+%
+% CHAPTER
+%
+  \dimen0=2.25em	% left chapter.article number
+  \dimen1=.6em		% space for dots
+  \dimen2=1.5em		% right page number
+%
+  \ifnum #5=1%
+    \ifnum\wasparagraph=1%
+      \par
+      \vskip.2\baselineskip
+      \endgroup
+      \wasparagraph=0%
+    \fi
+    \vskip\baselineskip%
+    \par\noindent
+    \if:#4:\else\hbox to \dimen0{{\tenbf #4}\hfil}\fi%
+    {\tenbf%
+    \ifx\pdfoutput\undefined%
+      #1%
+    \else%
+      \global\advance \contentlinecnt by 1%
+      \pdfstartlink attr {/Border [0 0 0]} goto num \the\contentlinecnt%
+      #1\pdfendlink%
+    \fi%
+    }%
+    \leaders\hbox to\dimen1{\hfil}\hfill\hbox to 1.8em{\hfill\tenbf #3}\par
+    \penalty10000%
+    \vskip1pt%
+    \penalty10000%
+%
+% ARTICLE
+%
+  \else\ifnum #5=2%
+    \par\noindent
+    \hbox to \dimen0{#4\hfil}%
+    {\tenrm%
+    \ifx\pdfoutput\undefined%
+      #1%
+    \else%
+      \global\advance \contentlinecnt by 1%
+      \pdfstartlink attr {/Border [0 0 0]} goto num \the\contentlinecnt%
+      #1\pdfendlink%
+    \fi%
+    }
+    \hangindent=\dimen0\hangafter1
+    \ifx:#2:			% no authors
+      \leaders\hbox to\dimen1{\hfil .\hfil}\hfill\hbox to\dimen2{\hfill#3}\par
+    \else
+      \setbox1=\hbox{#1 {\smallfnt (#2)}}%
+      \ifdim\wd1<\hsize		% reasonably short list of authors
+        \leaders\hbox to\dimen1{\hfil .\hfil}\hfill\hbox to\dimen2{\hfill#3}\par
+      \else			% too much author names
+        \par
+        \begingroup
+          \leftskip=\dimen0
+          \rightskip=\dimen2 plus 1fil
+          \parfillskip=-\dimen2
+          \noindent{\smallfnt (#2)}\ %
+          \leaders\hbox to\dimen1{\hfil .\hfil}\hfill\hbox to\dimen2{\hfill#3}\par
+        \endgroup
+      \fi
+    \fi
+    \vskip1pt%
+%
+% SECTION
+%
+  \else\ifnum #5=3%
+    \ifnum\wasparagraph=1%
+      \par
+      \vskip.2\baselineskip
+      \endgroup
+      \wasparagraph=0%
+    \fi
+    \par\noindent
+    \kern\dimen0\hbox to 3.5em{#4\hfil}%
+    {\tenrm%
+    \ifx\pdfoutput\undefined%
+      #1%
+    \else%
+      \global\advance \contentlinecnt by 1%
+      \pdfstartlink attr {/Border [0 0 0]} goto num \the\contentlinecnt%
+      #1\pdfendlink%
+    \fi%
+    }
+    \hangindent=\dimen0\hangafter1
+    \leaders\hbox to\dimen1{\hfil .\hfil}\hfill\hbox to\dimen2{\hfill#3}\par
+    \vskip1pt%
+%
+% PARAGRAPH
+%
+  \else
+    \ifnum\wasparagraph=0%
+      \wasparagraph=1%
+      \begingroup
+      \leftskip=5.75em\advance\leftskip by 3em%
+      \rightskip=2\parindent plus 1fil%
+      \noindent
+      \smallfonts
+    \fi
+    \hbox{\smallfonts #1}%
+  \fi\fi\fi
+}
+
+\def\addcontentline#1#2#3#4#5{
+%  \write\toc {\string\contentline{\noexpand #1}{\noexpand #2}{#3}}
+  \edef\act{%
+    \write\toc{%
+      \noexpand\string\noexpand\contentline
+        {#1}{#2}{#3}{#4}{#5}%
+    }%
+  }%
+  \act%
+}
+
+% \addcontentline with hyperref's (without \article)
+\def\addcontentline*#1#2#3#4#5{%
+  \addpdfdestoutline{#1}%
+  \addcontentline{#1}{#2}{#3}{#4}{#5}%
+}
+
+\def\tableofcontents{%
+  \pagenumbers	% this page already numbered
+  \chapter*{}{Obsah}
+  \mark{Obsah\hfil}%
+  \softinput{\jobname.toc} 
+  \immediate\openout\toc \jobname.toc
+}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%% Nadpisy chapter/appendix/article/section/paragraph
+
+\def\noindentfirst{%
+  \everypar={\setbox0=\lastbox\everypar={}}%
+}
+
+\newcount\chapternum
+\chapternum=0
+
+\newcount\vakatnum
+\vakatnum=0
+\def\vakat{%
+  \advance\vakatnum by 1%
+  \message{vakat č. \the\vakatnum}
+  \nopageheader
+  \nopagenumbers
+  \leavevmode\hbox{}\vfill\eject
+  \pagenumbers
+}
+
+%
+% CHAPTER
+%
+\def\chapter*#1#2{%
+  \vfill\supereject
+% vakat?
+  \ifodd\pageno\else
+    \vakat
+  \fi
+  \global\advance \pdfdestcnt by 1%
+  \ifnum\chapternum=1%
+    \global\advance \chaptercnt by 1%
+    \articlecnt=0%
+  \fi
+  \vbox{%
+    \addpdfdestoutline{\if:#1:\else #1 \fi #2}
+    \setbox1=\hbox{\chapterfnt \if:#1:\else\hbox to 1.5em{#1\hfil}\fi #2}%
+    \ifnum\wd1<\hsize
+      \dp1=0pt%
+      \noindent\box1\par
+    \else
+      \begingroup
+      \rightskip=0pt plus 1fil
+      \baselineskip=28pt%
+      \chapterfnt
+      \hangindent1.5em\hangafter1\noindent\if:#1:\else\hbox to 1.5em{#1\hfil}\fi#2\par
+      \endgroup
+    \fi
+    \bigskip%
+    \bigskip%
+    \bigskip%
+  }%
+  \gdef\levezahlavi{#1\hfil #2}%
+  \nopageheader
+  \par\nobreak
+  \noindentfirst
+}
+
+\def\chapter#1{%
+  \chapternum=1
+  \sectioncnt=0%
+  \chapter*{\the\chaptercnt}{#1}%
+  \addcontentline{\protect #1}{}{\the\pagetoks}{\the\chaptercnt}{1}%
+  \chapternum=0
+}
+
+\def\chapter**#1{%
+  \chapter*{}{#1}%
+  \addcontentline{#1}{}{\the\pagetoks}{}{1}%
+  \articlecnt=0%
+%  \gdef\articlename{#1}%
+  \mark{#1\hfil}%
+}
+
+%
+% APPENDIX
+%
+\def\Alph#1{%
+  \ifcase#1\or A\or B\or C\or D\or E\or F\or G\or H\or I\or J\or
+  K\or L\or M\or N\or O\or P\or Q\or R\or S\or T\or U\or V\or W\or X\or
+  Y\or Z\else\fi}
+
+\newcount\appendixcnt
+\appendixcnt=0
+
+\def\appendix#1{%
+  \advance\appendixcnt by 1%
+  \sectioncnt=0%
+  \chapter*{\Alph\appendixcnt}{#1}%
+  \addcontentline{\protect #1}{}{\the\pagetoks}{\Alph\appendixcnt}{1}%
+  \chapternum=0
+}
+
+%
+% ARTICLE
+%
+\def\articlename{}
+
+\def\article#1#2{%
+  \global\advance \articlecnt by 1%
+  \global\advance \pdfdestcnt by 1%
+  \sectioncnt=0%
+  \global\addcontentmode=1%
+  \article*{#1}{#2}{\the\articlecnt}%
+  \global\addcontentmode=0%
+  \addcontentline{\protect #1}{#2}{\the\pagetoks}{\the\articlecnt}{2}%
+  \par\nobreak
+}
+
+\newskip\articleamount
+\articleamount=4pt plus 2pt
+
+\def\article*#1#2#3{%
+  \setbox0=\hbox{{\articlefnt\if:#3:\else #3~\fi #1}}%
+%  \setbox1=\hbox{#2}% s autorem
+  \setbox1=\hbox{}% bez autora v textu
+  \dimen0=\wd0%
+  \advance\dimen0 by\wd1%
+  \bigskip
+  \bigskip
+  \bigskip
+  \vbox{
+    \ifnum\addcontentmode=1%
+      \addpdfdestoutline{\if:#3:\else #3 \fi #1}%	% inside the \vbox due to pagebreak
+    \fi
+    \ifdim\dimen0<\hsize	% both title and author(s) fit on the same line
+      \line{\box0\hfil\box1}%
+    \else
+      \ifdim\wd0<\hsize
+        \ifdim\wd1<\hsize	% title on the 1st line, author on the 2nd
+          \box0\smallskip\hfill\box1%
+        \else			% list of authors is too long
+          \setbox2=\hbox{{\articlefnt #3}\leavevmode\kern6pt}%
+          \hbox{\copy2{\articlefnt #1}}%
+          \smallskip
+	  \begingroup
+	    \rightskip=0pt plus 1fil
+            \noindent\hangindent\wd2\hangafter0 #2\par
+	  \endgroup
+        \fi
+      \else			% even the title itself is too long
+        \setbox0=\hbox{{\articlefnt #3}\leavevmode\kern6pt}%
+        \begingroup
+        \baselineskip=14pt
+        \noindent\hangindent\wd0\hangafter1\box0{\articlefnt #1}\hskip2cm\hfil #2\par
+        \endgroup
+      \fi
+    \fi
+    \bigskip
+  }%
+  \par\nobreak
+  \noindentfirst
+  \gdef\articlename{\if:#3:\else #3\ \fi #1}%
+  \mark{#1\hfil #3}%
+  \gdef\authorname{#2}%
+}
+
+%
+% SECTION
+%
+\newcount\sectioncnt
+\newcount\subsectioncnt
+\sectioncnt=0
+\subsectioncnt=0
+
+\def\section#1{%
+  \global\advance \sectioncnt by 1%
+  \global\advance \pdfdestcnt by 1%
+  \ifnum\appendixcnt=0%
+    \global\addcontentmode=1%
+    \section*{#1}{\the\chaptercnt.\the\sectioncnt}%
+    \global\addcontentmode=0%
+    \addcontentline{\protect #1}{}{\the\pagetoks}{\the\chaptercnt.\the\sectioncnt}{3}%
+  \else
+    \global\addcontentmode=1%
+    \section*{#1}{\Alph\appendixcnt.\the\sectioncnt}%
+    \global\addcontentmode=0%
+    \addcontentline{\protect #1}{}{\the\pagetoks}{\Alph\appendixcnt.\the\sectioncnt}{3}%
+  \fi
+  \par\nobreak
+}
+
+\def\section*#1#2{%
+  \subsectioncnt=0%
+  \vskip\baselineskip
+  \vbox{%
+    \ifnum\addcontentmode=1%
+      \addpdfdestoutline{\if:#2:\else #2 \fi #1}%	% inside the \vbox due to pagebreak
+    \fi
+    \noindent
+    {\sectionfnt
+    \if:#2:\else
+      #2\ %
+    \fi
+    #1}%
+    \smallskip
+  }%
+  \mark{#1\hfil #2}%
+  \par\nobreak
+  \noindentfirst
+}
+
+%
+% PARAGRAPH
+%
+\def\paragraph#1{%
+  \bigskip\noindent{\paragraphfnt #1\pardot}%
+  \addcontentline{\protect #1}{}{\the\pagetoks}{}{4}%
+}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%% Sazba jmenneho rejstriku (nutno zpracovat soubor *.idx na *.srt pomoci idx.sh!)
+
+\newwrite\idxs
+\immediate\openout\idxs \jobname.idx
+
+\def\indexname{Rejstřík}
+
+\def\makeindex{%
+%  \article{\indexname}{}
+%  \immediate\closeout\idxs	% nezavirat! umozni to reference i za index (stejne musim *.idx -> *.srt)
+
+  \medskip
+
+  \begingroup
+
+  \smallfonts
+  \baselineskip=\smallbaselineskip
+  \splittopskip=\baselineskip
+  \lineskiplimit=-\maxdimen
+  \widowpenalty=0
+  \clubpenalty=0
+  \raggedright
+  \parskip=0pt
+
+  \begmulti 2
+
+  \softinput{\jobname.srt}
+
+  \endmulti
+
+  \endgroup
+%  \endarticle
+}
+
+%% makro v *.idx souboru
+\def\idxwrite#1#2#3#4{%
+  \edef\act{%
+    \write\idxs{\noexpand\string\noexpand%
+      \idxdef{#1}{\ifx:#2:\the\pagetoks\else#2\fi}{#3}{#4}%
+    }%
+  }%
+  \act
+  \nobreak	% jinak se lomi stranka za nadpisem!
+}
+
+%% ruzne typy odkazu do rejstriku
+\def\idxtxt#1#2{\idxwrite{#1}{}{\the\chaptercnt.\the\articlecnt}{#2}}
+\def\idx#1{#1\idxtxt{#1}{0}}	% obycejny odkaz
+\def\idxem#1{{\em #1\/}\idxtxt{#1}{0}}	% zvyrazneny
+\def\idxbf#1{{\bf #1\/}\idxtxt{#1}{0}}	% tucny
+\def\idxx#1{\idxtxt{#1}{0}}	% neviditelny odkaz (napr. slovo neni v 1. pade)
+\def\idxname#1{\idxtxt{#1}{1}}	% jmeno
+\def\idxsite#1{\idxtxt{#1}{2}}	% misto
+\def\idxvoc#1{\idxtxt{#1}{4}}	% slovnik
+\def\idximg#1{\idxtxt{#1}{5}}	% obrazek
+\def\viz#1#2{\idxwrite{#2}{viz #1}{}{3}}	% viz jine stanoviste
+\let\index=\idxx
+
+%% sazba zaznamu v miatopisnem rejstriku, nekolik typu podle #4, testovani predchoziho zaznamu
+\def\previdx{}
+\def\prevpage{}
+\def\prevtype{}
+
+% sazba cisla strany dle typu
+\def\idxpage#1#2{%
+  \ifnum#2=2%	mistopisna jmena
+    \pageurl{{\em #1}}{#1}%
+  \else \ifnum#2=3%	odkazy `viz'
+    #1%
+  \else \ifnum#2=4%	slova ze slovniku
+    \pageurl{{\bf #1}}{#1}%
+  \else \ifnum#2=5%	obrázky
+    \pageurl{{\bf #1}}{#1}%
+  \else%		ostatni polozky
+    \pageurl{#1}{#1}%
+  \fi\fi\fi\fi
+}
+
+% sazba polozky rejstriku
+\def\idxdef#1#2#3#4{%
+  \gdef\nextidx{#1}%
+  \gdef\nextpage{#2}%
+  \gdef\nexttype{#4}%
+  \gdef\typeviz{3}%
+%
+% sazba mistopisneho jmena
+%
+  \def\tmpdef{%
+    \par
+    \noindent\hangindent2em\hangafter1%
+    \ifnum#4=3%
+      \hskip 1em #1: % viz jsou odsazeny
+    \else \ifnum#4=1%
+      {\sc #1}: %
+    \else
+      \hbox{}#1: %
+    \fi\fi
+  }%
+%
+% jmeno tisknout jen pokud se neopakuje predchozi, nebo to je odkaz typu `viz'
+%
+  \ifx\previdx\nextidx
+    \ifx\prevtype\typeviz\else\ifx\nexttype\typeviz
+      \tmpdef
+    \fi\fi
+  \else
+    \tmpdef
+  \fi
+%
+% cislo strany, udelat pred nim carku?
+%
+  \ifx\previdx\nextidx
+    \ifx\prevpage\nextpage
+      \ifx\prevtype\nexttype\else
+        , \idxpage{#2}{#4}%
+      \fi
+    \else
+      \ifx\prevtype\typeviz
+        , \idxpage{#2}{#4}%
+      \else
+        \ifx\nexttype\typeviz
+          \idxpage{#2}{#4}%
+        \else
+          , \idxpage{#2}{#4}%
+        \fi
+      \fi
+    \fi
+  \else
+    \idxpage{#2}{#4}%
+  \fi
+%
+  \gdef\previdx{#1}%
+  \gdef\prevpage{#2}%
+  \gdef\prevtype{#4}%
+%
+  \ignorespaces
+}
+
+% hypertext page-numbers in PDF
+
+\def\pageurl#1#2{%
+  \count0=#2\advance\count0 by 2 % MEZERA!; zde je pocet stran v PDF, ktere se NEPOCITAJI jako stranky knihy!
+  \ifx\pdfoutput\undefined%
+     #1%
+  \else%
+    \pdfstartlink attr {/Border [0 0 0]} goto page \the\count0 {/Fit}%
+%    \setcolor\cmykViolet #1\setcolor\cmykBlack\pdfendlink%
+    #1\pdfendlink%
+  \fi%
+}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%% Makra pro vicesloupcovou sazbu z Olsak (1997).
+
+\newdimen\colsep \colsep=2em% horiz. mezera mezi sloupci
+\newcount\tempnum
+\splittopskip=\baselineskip
+
+\def\roundtolines #1{%
+  %% zaokrouhli na cele nasobky vel. radku
+  \divide #1 by\baselineskip
+  \multiply #1 by\baselineskip
+}
+\def\corrsize #1{%% #1 := #1 + \splittopskip - \topskip
+  \advance #1 by \splittopskip
+  \advance #1 by-\topskip
+}
+
+\def\begmulti #1 {%
+  \par\smallskip\penalty0
+  \def\Ncols{#1}
+  \setbox0=\vbox\bgroup\penalty0
+  %% \hsize := sirka sloupce = (\hsize+\colsep) / n - \colsep
+  \advance\hsize by\colsep
+  \divide\hsize by\Ncols
+  \advance\hsize by-\colsep
+}
+\def\endmulti{%
+  \vfil\egroup
+  \setbox1=\vsplit0 to0pt
+  %% \dimen1 := velikost zbyleho mista na strance
+  \ifdim\pagegoal=\maxdimen
+    \dimen1=\vsize
+    \corrsize{\dimen1}%
+  \else
+    \dimen1=\pagegoal
+    \advance\dimen1 by-\pagetotal
+  \fi
+  \ifdim \dimen1<2\baselineskip
+    \vfil\break
+    \dimen1=\vsize
+    \corrsize{\dimen1}%
+  \fi
+  %% \dimen0 := vyska n sloupcove sazby po rozdeleni do sloupcu
+  %% = (\ht0 + (n-1)\baselineskip) / n, zaokruhleno na radky
+  \dimen0=\Ncols\baselineskip
+  \advance\dimen0 by-\baselineskip
+  \advance\dimen0 by \ht0%
+  \divide\dimen0 by\Ncols
+  \roundtolines{\dimen0}%
+  %% Rozdelit sazbu n sloupcu do stranek nebo nerozdelit?
+  \ifdim \dimen0>\dimen1%
+    \splitpart
+  \else
+    \makecolumns{\dimen0}%
+  \fi
+  \ifvoid0\else
+    \errmessage{Ztracený text ve sloupcích?}%
+    \box0% ukaz, co chybi!
+  \fi
+}
+
+\def\makecolumns#1{%
+  \setbox1=\hbox{}%
+  \tempnum=0%
+  \loop \ifnum\Ncols>\tempnum
+    \setbox1=\hbox{\unhbox1 \vsplit0 to#1 \hss}%
+    \advance\tempnum by1%
+  \repeat
+  \hbox{}\nobreak\vskip-\splittopskip \nointerlineskip
+  \line{\unhbox1\unskip}%
+}
+\def\splitpart{%
+  \roundtolines{\dimen1}%
+  \makecolumns{\dimen1}%
+  \advance\dimen0 by-\dimen1%
+  %% \dimen0 := vyska _zbyle_ n sloupcove sazby
+  %% \dimen1 := prazdne misto na strance = (cca) \vsize
+  \vfil\break
+  \dimen1=\vsize
+  \corrsize{\dimen1}%
+  %% Rozdelit zbylou sazbu n sloupcu do vice stranek?
+  \ifvoid0 \else
+    \ifdim \dimen0>\dimen1%
+      \splitpart
+    \else
+%      \message{makecolumns=\the\dimen0}
+      \makecolumns{\dimen0}%
+    \fi
+  \fi
+}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% Read figures from subdirectory figs[/preview]
+
+\def\preview{}
+%\let\imgold=\img
+%\def\img#1#2{\imgold{figs/#1}{figs/#2}}
+
+% switch-on preview image only (see config.tex)
+\ifnum\previewimages=1
+  \def\preview{../preview/}
+\fi
+
+% print filenames instead of figures (see config.tex)
+\ifnum\emptyimages=1
+  \def\img#1#2{%
+    \message{#1}%
+    \hbox to\epsfxsize{%
+      \hss
+      \prn #1\relax
+      \hss
+    }%
+    \epsfxsize=0pt%
+  }
+  \def\prn#1{%
+%    \message{#1}%
+%    \message{\the\catcode`#1}%
+    \ifx#1\relax%
+      \let\next=\relax
+    \else
+      \ifx#1\preview%
+        {\tt preview/}%
+      \else
+        {\tt\string#1}%
+      \fi
+      \let\next=\prn
+    \fi
+    \next
+  }
+%
+  \let\figurecaprt=\figure
+\fi
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%% Drobne definice pro jednotny styl
+
+\def\misto#1{{\em #1\/}}
+\def\dilo#1{{\em #1\/}}
+\def\foto#1#2{Foto #1\if:#2:\else\ (#2)\fi.}
+\def\percent{\,\%\ }
+\def\MetaPost{{\mflogo METAPOST}}
+\def\nineMetaPost{{\ninemflogo METAPOST}}
+\def\apod{apod.}
+\def\cp{\hbox{č.~p.}}
+\def\pul{$\lower.75pt\hbox{$^1$}\kern-2pt/\kern-1pt_2$}
+\def\evcislo{ev.~č.}
+\def\Evcislo{Ev.~č.}
+\def\email{e-mail}
+\def\Email{E-mail}
+\def\cdrom{CD-ROM}
+%\newcount\myitemcnt\myitemcnt=0
+%\def\myitem{\item{--}}
+%\def\beginitem{\smallskip\begingroup}
+%\def\enditem{\endgroup\medskip}
+
+\def\ISBN{???}
+\def\recenzent{???}
+\def\edicnicislo{???}
+\def\tisk{Těšínská tiskárna, a.~s., Štefánikova~2, Český Těšín}
+\def\navrhobalky{???}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%% A graphical glue at the end of chapters?
+
+\def\endchapter{%
+%  \vfil
+%  \centerline{* * *}
+%  \vfil
+%  \eject
+}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% Umisteni popisku obr. do hrbetu resene pres pracovni soubor
+% s cisly stran, na nichz se obrazky nachazeji
+
+\def\fpgdef#1#2{%
+  \expandafter\def\csname fpg:#1\endcsname{#2}%
+}
+
+\def\fpgwrite{%
+  \edef\act{%
+    \write\fpgs{\noexpand\string\noexpand%
+      \fpgdef{\the\figurenum}{\the\pagetoks}%
+    }%
+  }%
+  \act
+}
+
+\softinput{\jobname.fpg}
+
+\newwrite\fpgs
+\immediate\openout\fpgs \jobname.fpg
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%% Additional macros
+
+\def\itm{\myitem}
+%\def\part{\section}
+\def\part#1{{\em #1.\/}}
+\let\verb=\verbtt
+
+% astronomical symbols
+\font\astrosymten   = \fontdir astrosym scaled 625
+\font\astrosymeight = \fontdir astrosym scaled 500
+\font\astrosymseven = \fontdir astrosym scaled 438
+\font\astrosymsix   = \fontdir astrosym scaled 375
+\font\astrosymfive  = \fontdir astrosym scaled 312
+
+\def\hvezd{\ifmmode *\else $*$\fi}
+\def\slunce{\ifmmode \odot\else $\odot$\fi}
+\def\zeme{\ifmmode \oplus\else $\oplus$\fi}
+\def\mesic{%
+  {\mathchoice%
+    {\hbox{\kern.02em\lower.1em \hbox{\astrosymten  \char210}}}%
+    {\hbox{\kern.02em\lower.1em \hbox{\astrosymten  \char210}}}%
+    {\hbox{\kern.01em\lower.1em \hbox{\astrosymeight\char210}}}%
+    {\hbox{\kern.00em\lower.09em\hbox{\astrosymsix  \char210}}}%
+  }%
+}
+\def\jupiter{%
+  {\mathchoice%
+    {\hbox{\hbox{\astrosymten  \char205}}}%
+    {\hbox{\hbox{\astrosymten  \char205}}}%
+    {\hbox{\hbox{\astrosymeight\char205}}}%
+    {\hbox{\hbox{\astrosymsix  \char205}}}%
+  }%
+}
+
+\def\verbttsmall#1{%
+  \begingroup%
+  \smallfonts%
+  \baselineskip=9pt%
+  \begingroup%
+  \let\oldpar=\par\def\par{\oldpar\leavevmode}%
+  \let\do\makeother \dospecials%
+  \tt \obeyspaces \obeylines \parskip0pt \parindent0pt%
+  \def\temp ##1#1{\leavevmode##1\endgroup\par\endgroup}\temp%
+}
+
+\def\parr{\hfil\break\indent}
+\def\hateq{\mathrel{\widehat=}}
+
+\font\astrosym=\fontdir astrosym scaled 500
+\def\jarnibod{\hbox{\astrosym\char11}}
+
+\long\def\mynote#1{%
+  \medskip
+  \begingroup
+  \smallfonts
+  \baselineskip=\smallbaselineskip
+  #1\par
+  \endgroup
+  \medskip
+}
+
+%\let\caption=\figurecap
+
+\def\textindent#1{%
+  \setbox0=\hbox{#1 }%
+  \ifdim\wd0>\parindent
+    \begingroup\parindent=1.33\parindent\indent\endgroup
+  \else
+    \indent
+  \fi
+  \llap{\box0}\ignorespaces
+}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\def\reseni{\vskip\baselineskip\noindent{\em Řešení:\/}\ }
+\def\priklad{\vskip\baselineskip\noindent{\em Příklad:\/}\ }
+
+\endinput
+
+

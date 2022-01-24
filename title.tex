@@ -1,0 +1,64 @@
+
+\def\title#1{\global\def\booktitle{#1}}
+\def\author#1{\global\def\bookauthor{#1}}
+
+\font\MFx=csss10 at 10pt
+\font\MFxvi=csss10 at 16pt
+\font\MFxvibf=csssbx10 at 16pt
+\font\MFxxxvib=csb10 at 36pt
+
+\def\maketitle{%
+  \hrule height 0pt%
+  \vskip 1.25in
+  \begingroup
+  \baselineskip=19.2pt
+  \centerline{\MFxvi\bookauthor}%
+  \vskip 1.2\baselineskip
+  \centerline{\MFxvibf\booktitle}%
+  \endgroup
+  \vfill
+  \begingroup
+  \MFx
+%  \centerline{VYDAL MATFYZPRESS}
+  \vskip 0.6\baselineskip
+  \centerline{PRAHA \the\year}
+  \endgroup
+  \par\eject
+  \leavevmode\vfill\eject
+}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\title{ASTROFYZIKA PRO GYMNÁZIA}
+\author{Miroslav Brož, Rostislav Brož}
+
+\nopagenumbers
+\hrule height 0pt
+\noindent\vskip-1.15in\hbox to\hsize{\kern-1.00in\hbox to 6.70in{\setdarkviolet\leaders\hrule height 0.75in\hfil\setblack}\hss}
+\begingroup
+\baselineskip=19.2pt
+\vskip 1.00in
+\centerline{\MFxxxvib ASTROFYZIKA}%
+\vskip 1.2\baselineskip
+\centerline{\MFxxxvib PRO GYMNÁZIA}%
+\vskip 1.00in
+%\noindent\hbox to\hsize{\kern-1.00in\imgxsize{6.70in}\img{???}\hss}
+\endgroup
+\vfill
+\eject
+
+\maketitle
+
+\pagenumbers
+
+\leavevmode
+\vskip 5.00in
+\mynote{
+Titulní obrázek:
+???
+}
+\vfill
+\eject
+
+
