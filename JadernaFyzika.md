@@ -203,3 +203,4 @@ Vazou v jadre nukleony
 + Zareni alfa ma velmi malou pronikavost, nebezpecne je ale u radioaktivnich plynu, ktere muzeme vdechnout. Jednim z nich je radon. 
 + K vyhodnoceni ucinku ionizujiciho zareni na cloveka se uziva zvlastni velicina - dava ionizujiciho zareni. Jeji jednotkou je sievert (Sv)
     + malym davkam ozareni je vystaven kazdy clovek (0.4 - 4 mSV). Vyssi davky obdrzi clovek ve vyssich nadmorskych vyskach, pri letu letadlem, v lokalitach zasazenych radonem, ... 
++ Nejvice neprirozenych zdroju ionizujiciho zareni bylo do zivotniho prostredi zaneseno v prubehu skousek jadernych zbrani. Dnes jsou zakazany 
