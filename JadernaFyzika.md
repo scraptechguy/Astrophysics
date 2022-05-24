@@ -187,3 +187,19 @@ Vazou v jadre nukleony
 + Zmena vlastnosti latky pri ozareni (zpomaleni rozmnozovani zhoubnych bunek, sterilizace lekarskych nastroju, zamezeni klicivosti brambor)
 + Teplo produkovane radionuklidy (elektricke baterie, v satelitech, meteorologickych stanicich)
 + Znackovane atomy (mereni rychlosti krevniho obehu, cinnost stitne zlazy)
++ Jaderne hodiny
+
+#### Ochrana pred zarenim 
+
++ Souhrnne zareni skodlive pro zive organismy nazyvame ionizujici zareni. Je to zareni, ktere ionizuje atomy
++ Mezi ionizujici zareni patri:
+    + radioaktivni zareni (alfa, beta, gama)
+    + proud protonu a neutronu
+    + ultrafialove a rentgenove zareni
++ Jak ionizujuci zareni skodi? 
+    + narusuje strukturu bunek a poskozuje chromozomy
+    + pri silnejsim zareni bunka odumira
+    + organismus postihuje nemoc z ozareni
++ Zareni alfa ma velmi malou pronikavost, nebezpecne je ale u radioaktivnich plynu, ktere muzeme vdechnout. Jednim z nich je radon. 
++ K vyhodnoceni ucinku ionizujiciho zareni na cloveka se uziva zvlastni velicina - dava ionizujiciho zareni. Jeji jednotkou je sievert (Sv)
+    + malym davkam ozareni je vystaven kazdy clovek (0.4 - 4 mSV). Vyssi davky obdrzi clovek ve vyssich nadmorskych vyskach, pri letu letadlem, v lokalitach zasazenych radonem, ... 
