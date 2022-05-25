@@ -1,18 +1,13 @@
 ## Elektroskop 
 
-Nabitou desticku osvetlime horskym sluncem 
-
-vychylka elektroskopu je
-
-nabijeleme-li zinkovou desticku kladnym nabojem
-
-dopadajici zareni uvolnuje z kovu elektrony, ale ne castice 
++ Nabitou desticku osvetlime horskym sluncem 
++ vychylka elektroskopu je
++ nabijeleme-li zinkovou desticku kladnym nabojem
++ dopadajici zareni uvolnuje z kovu elektrony, ale ne castice 
 s kladnym nabojem
-
-Mezi zdroj zareni a zinkovou desticku postavime sklenenou desku 
++ Mezi zdroj zareni a zinkovou desticku postavime sklenenou desku 
 pohlcujici ultrafialove zareni 
-
-na katodu dopada zareni, ktere z ni uvolnuje elektrony a obvodema prochazi proud
++ na katodu dopada zareni, ktere z ni uvolnuje elektrony a obvodema prochazi proud
 
 
 #### Zavery: 
