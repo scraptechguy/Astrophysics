@@ -227,6 +227,3 @@ U 235 -> Th 231 -> Pa 231 -> Ac 227 -> Ra 223 -> Rn 219 -> Po 215 -> Pb 211 -> B
 ```
 Pl 239 -> 
 ```
-
-![image](https://user-images.githubusercontent.com/75474651/171117587-dc554fcc-a0f4-42e5-bc0f-9c37f24ad1c7.png)
-
