@@ -213,3 +213,18 @@ k = n2 / n1
     + k = 1 - reakce je stacionarni
     + k > 1 - reakce se lavinovite zvetsuje
     + k < 1 - reakce vyhasina
+
++ **Reaktor** - stepeni jader v reaktoru vytvari teplo, ktere meni vodu na vysokoenergickou paru. Ta roztaci turbinu ktera vyrabi elektrickou energii. K regulaci reakci se pouzivaji uhlikove **regulacni tyce**. Jako palivo se casto pouziva **uran 233 a 235**, nebo **plutonium 239**. Ty se rozpadaji podle jejich **rozpadovych rad**: 
+
+```
+U 232 -> Th 228 -> Ra 224 -> Rn 220 -> Po 216 -> Pb 212 -> Bi 212 -> Tl 208 -> Pb 208 (stabilni)
+```
+
+```
+U 235 -> Th 231 -> Pa 231 -> Ac 227 -> Ra 223 -> Rn 219 -> Po 215 -> Pb 211 -> Bi 211 -> Tl 207 -> Pb 207 (stabilni)
+```
+
+```
+Pl 239 -> 
+```
+
