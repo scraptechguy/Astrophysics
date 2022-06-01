@@ -227,3 +227,46 @@ U 235 -> Th 231 -> Pa 231 -> Ac 227 -> Ra 223 -> Rn 219 -> Po 215 -> Pb 211 -> B
 ```
 Pl 239 -> 
 ```
+
+
+##### Otazky
+
+1. K cemu slouzi dozimetr?
+
+        Meri mnozstvi zareni
+
+2. Které záreni patri mezi nejmene pronikave?
+
+        Alpha
+
+5. Cim je tvoreno zareni ß?
+
+        Elektrony/pozitrony
+
+7. Jakym materialem müzeme odstinit zareni y?
+
+        Olovem
+
+8. K Cemu slouzi moderátor v jadernem reaktoru?
+
+        Zpomaluje reakci (v mnoha pripadech je to voda)
+
+9. Se kterou jadernou reakci se setkáme v jaderném reaktoru?
+
+        Se stepenim
+
+10. Jake se v jaderném reaktoru pouziva palivo?
+
+        Uran 235, 238 nebo plutonium 239
+
+11. K cemu slouzi regulacni tyce?
+
+        K rychlemu zpomaleni/zastaveni reakce
+
+12. Proc se presouvá palivo z jedné nádoby do druhe pod vodou?
+
+        Voda stini neutrony
+
+13. Co je hlavni naplni práce operátora jaderneho reaktoru?
+
+        Nemit zeny
